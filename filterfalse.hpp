@@ -23,7 +23,10 @@ namespace itertools
 
         public:
             iterator(F fil, typename C::iterator first, typename C::iterator l)
-                : filter(fil), it(first), last(l) {}
+                : filter(fil), it(first), last(l) {
+                    while (it != last && filter(*it))
+                    ++it;
+                }
 
             // ++i;
             iterator &operator++()
