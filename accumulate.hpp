@@ -2,18 +2,9 @@
 
 namespace itertools
 {
-    //template <typename T>
-    //auto sum = [](T x, T y) { return x + y; }
-    typedef struct
-    {
-        template <typename S>
-        S operator()(S x, S y) const
-        {
-            return x + y;
-        }
-    } _sum;
+    auto _sum = [](auto x, auto y) { return x + y; };
 
-    template <typename C, typename F = _sum>
+    template <typename C, typename F = decltype(_sum)>
     class accumulate
     {
     protected:
@@ -21,7 +12,7 @@ namespace itertools
         F function;
 
     public:
-        accumulate(C c, F f = _sum())
+        accumulate(C c, F f = _sum)
             : container(c), function(f) {}
 
         class iterator
