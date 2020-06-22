@@ -23,13 +23,14 @@ namespace itertools
 
         public:
             iterator(typename C::iterator first, typename C::iterator l, typename B::iterator b)
-                : it(first), last(l), b_it(b) {
-                    while (it != last && !(*b_it))
+                : it(first), last(l), b_it(b)
+            {
+                while (it != last && !(*b_it))
                 {
                     ++it;
                     ++b_it;
                 }
-                }
+            }
 
             // ++i;
             iterator &operator++()

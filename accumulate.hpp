@@ -1,4 +1,7 @@
 #pragma once
+#include <functional>
+
+using namespace std;
 
 namespace itertools
 {
@@ -21,11 +24,16 @@ namespace itertools
             F function;
             typename C::iterator it;
             typename C::iterator last;
-            decltype(*(container.begin())) sum;
+            typename decay<decltype(*(container.begin()))>::type sum;
+            
 
         public:
             iterator(typename C::iterator first, typename C::iterator l, F fun)
-                : it(first), last(l), function(fun), sum(*first) {}
+                : it(first), last(l), function(fun)
+            {
+                if (it != last)
+                    sum = *it;
+            }
 
             // ++i;
             iterator &operator++()
@@ -39,18 +47,16 @@ namespace itertools
             iterator operator++(int)
             {
                 iterator i = *this;
-                ++it;
-                if (it != last)
-                    sum = function(sum, *it);
+                ++(*i);
                 return i;
             }
             bool operator==(const iterator &other) const
             {
-                return it == other.it;
+                return (it == other.it);
             }
             bool operator!=(const iterator &other) const
             {
-                return it != other.it;
+                return (it != other.it);
             }
             auto operator*() const
             {

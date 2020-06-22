@@ -8,6 +8,7 @@ namespace itertools
         int first, last;
 
     public:
+
         //Constructor range:
         range(int f, int l) : first(f), last(l)
         {

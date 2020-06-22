@@ -1,22 +1,49 @@
-#!make -f
+#include "doctest.h"
+#include <iostream>
+#include <vector>
+#include <limits>
 
-CXX=clang++-9 
-CXXFLAGS=-std=c++2a
+#include "range.hpp"
+#include "accumulate.hpp"
+#include "filterfalse.hpp"
+#include "compress.hpp"
 
-HEADERS=range.hpp accumulate.hpp filterfalse.hpp compress.hpp
-OBJECTS=
 
-run: demo
-	./$^
+using namespace itertools;
+using namespace std;
 
-demo: Demo.o $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o demo
+TEST_CASE("range") {
+    int j = 0;
+    for (int i: range(0,50)){ 
+		CHECK(i==j++);     
+    }
+}
 
-test: TestCounter.o Test.o $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o test
+TEST_CASE("accumulate of range") {
+    int k = 0;
+	for (int i: accumulate(range(0,50))) {
+        CHECK(i==k*(k+1)/2);
+        k++;
+    }
+    
+}
+TEST_CASE("accumulate of string"){
+    vector<string> v = {"a", "v", "i", "t", "a", "l"};
+    string words[] = {"a", "av", "avi", "avit", "avita", "avital"};
+    int j = 0;
+    for(auto i : accumulate(v)){
+        CHECK(i == words[j++]);
+    }
+}
 
-%.o: %.cpp $(HEADERS)
-	$(CXX) $(CXXFLAGS) --compile $< -o $@
+TEST_CASE("filterfalse") {
+    for (auto i: filterfalse([](int x){return x%2==1;}, range(0,50)))
+        CHECK(i%2==0);
+}
 
-clean:
-	rm -f *.o demo test
+TEST_CASE("compress") {
+    vector<bool> bool_vector = {true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true,false,true};
+    for (auto i: compress(range(0,25), bool_vector)) {
+        CHECK(i%2 == 0);
+    }
+}
