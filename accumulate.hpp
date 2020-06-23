@@ -24,7 +24,7 @@ namespace itertools
             F function;
             typename C::iterator it;
             typename C::iterator last;
-            typename decay<decltype(*(container.begin()))>::type sum;
+            typename decay<decltype(*(container.begin()))>::type aggr;//aggregated value
             
 
         public:
@@ -32,7 +32,7 @@ namespace itertools
                 : it(first), last(l), function(fun)
             {
                 if (it != last)
-                    sum = *it;
+                    aggr = *it;
             }
 
             // ++i;
@@ -40,7 +40,7 @@ namespace itertools
             {
                 ++it;
                 if (it != last)
-                    sum = function(sum, *it);
+                    aggr = function(aggr, *it);
                 return *this;
             }
             // i++;
@@ -60,7 +60,7 @@ namespace itertools
             }
             auto operator*() const
             {
-                return sum;
+                return aggr;
             }
 
             iterator &operator=(const iterator &other)
@@ -69,7 +69,7 @@ namespace itertools
                 {
                     this->it = other.it;
                     this->last = other.last;
-                    this->sum = other.sum;
+                    this->aggr = other.aggr;
                     this->function = other.function;
                 }
                 return *this;
