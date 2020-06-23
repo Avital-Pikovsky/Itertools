@@ -37,7 +37,7 @@ TEST_CASE("accumulate of string"){
 }
 
 TEST_CASE("filterfalse") {
-    for (auto i: filterfalse([](int x){return x%2==1;}, range(0,50)))
+    for (auto i: filterfalse([](int x){return x%2==1;}, range(1,50)))
         CHECK(i%2==0);
 }
 
